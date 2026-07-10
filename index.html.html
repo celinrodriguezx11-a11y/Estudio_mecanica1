@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual del taller — Fundamentos de mecánica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDE6D6;
+    --paper-panel:#E4DBC6;
+    --paper-line:#C9BC9C;
+    --ink:#221D16;
+    --ink-soft:#5B5343;
+    --orange:#C85A1E;
+    --orange-dark:#8F3E12;
+    --yellow:#D9A230;
+    --green:#4B7A3E;
+    --red:#A83A2C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    background-image:
+      radial-gradient(var(--paper-line) 0.5px, transparent 0.5px);
+    background-size: 14px 14px;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:28px 24px 70px;}
+  header.top{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    border-bottom:4px solid var(--ink); padding-bottom:14px; margin-bottom:20px;
+    flex-wrap:wrap; gap:14px;
+  }
+  .brand-mark{display:flex; align-items:center; gap:12px;}
+  .brand-mark .box{
+    width:44px; height:44px; background:var(--orange); border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center; transform:rotate(-3deg);
+  }
+  .brand-mark svg{width:24px; height:24px;}
+  h1{
+    font-family:'Oswald', sans-serif; font-weight:700; font-size:34px;
+    letter-spacing:0.5px; margin:0; text-transform:uppercase;
+  }
+  .sub{font-size:14px; color:var(--ink-soft); margin-top:4px; font-family:'IBM Plex Mono', monospace;}
+  .stamp{
+    border:3px solid var(--green); color:var(--green); border-radius:50%;
+    width:76px; height:76px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transform:rotate(6deg); font-family:'Oswald',sans-serif; text-transform:uppercase; flex-shrink:0;
+  }
+  .stamp b{font-size:20px; line-height:1; font-family:'IBM Plex Mono',monospace;}
+  .stamp span{font-size:8.5px; letter-spacing:0.5px;}
+
+  nav.tabs{display:flex; gap:8px; overflow-x:auto; padding:4px 0 16px; -webkit-overflow-scrolling:touch;}
+  nav.tabs button{
+    font-family:'Oswald', sans-serif; text-transform:uppercase; letter-spacing:0.4px;
+    font-size:14.5px; white-space:nowrap; padding:11px 16px; background:var(--paper-panel);
+    border:2px solid var(--ink); color:var(--ink); cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  nav.tabs button.active{background:var(--ink); color:var(--paper);}
+  nav.tabs button .n{
+    display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px;
+    border-radius:50%; background:var(--green); color:#fff; font-size:10px;
+  }
+
+  .sheet{
+    background:var(--paper-panel); border:2px solid var(--ink); position:relative;
+    box-shadow:6px 6px 0 var(--paper-line);
+  }
+  .sheet-head{
+    display:flex; justify-content:space-between; align-items:center;
+    border-bottom:2px solid var(--ink); padding:12px 18px; font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .sheet-body{padding:30px;}
+
+  .diagram-box{
+    background:var(--paper); border:2px solid var(--paper-line); padding:14px;
+    margin-bottom:20px; display:flex; justify-content:center;
+  }
+  .diagram-box svg{width:100%; max-width:520px; height:auto;}
+  .dlabel{font-family:'IBM Plex Mono',monospace; font-size:11px; fill:var(--ink-soft);}
+  .dbig{font-family:'IBM Plex Mono',monospace; font-size:14px; fill:var(--ink);}
+
+  .card-text{font-size:19px; line-height:1.8; min-height:90px; display:flex; align-items:center;}
+  .row-between{display:flex; justify-content:space-between; align-items:center; margin-top:20px;}
+  .count{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft);}
+
+  button.action{
+    font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.5px; font-size:14.5px;
+    background:var(--ink); color:var(--paper); border:2px solid var(--ink); padding:12px 20px; cursor:pointer;
+  }
+  button.action:hover{background:var(--orange); border-color:var(--orange);}
+  button.action.ghost{background:transparent; color:var(--ink);}
+  button.action.ghost:hover{background:var(--paper-line); color:var(--ink);}
+  button.action:disabled{opacity:0.45; cursor:default;}
+
+  .q-title{font-size:19px; font-weight:600; margin:0 0 18px;}
+  .opt{
+    display:block; width:100%; text-align:left; font-size:16px; padding:14px 16px;
+    background:var(--paper); border:2px solid var(--paper-line); margin-bottom:10px; cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .opt:hover:not(:disabled){border-color:var(--ink);}
+  .opt.correct{border-color:var(--green); background:#DCE8D6; color:#2E4A26;}
+  .opt.wrong{border-color:var(--red); background:#EED8D3; color:#6B241A;}
+  .opt:disabled{cursor:default;}
+
+  .result{text-align:center; padding:10px 0;}
+  .result i{font-size:38px;}
+  .result .score{font-family:'Oswald',sans-serif; font-size:22px; text-transform:uppercase; margin:10px 0 2px;}
+  .result .msg{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+  .btn-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+
+  footer{margin-top:22px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;}
+  .glossary-toggle{font-family:'IBM Plex Mono',monospace; font-size:12px; background:none; border:none; color:var(--ink-soft); text-decoration:underline; cursor:pointer; padding:0;}
+
+  #glossary{display:none; margin-top:18px;}
+  #glossary.open{display:block;}
+  #brands{display:none;}
+  #brands.open{display:block;}
+  .brand-card{border:2px solid var(--ink); padding:14px; background:var(--paper);}
+  .brand-card .bname{font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:16px; font-weight:600; margin:0 0 2px;}
+  .brand-card .bcountry{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--orange-dark); margin:0 0 8px;}
+  .brand-card p{font-size:13.5px; line-height:1.6; color:var(--ink-soft); margin:0;}
+  .term{border-bottom:1px solid var(--paper-line); padding:10px 0; display:grid; grid-template-columns:1fr 2fr; gap:12px;}
+  .term b{font-family:'IBM Plex Mono',monospace; font-size:13px;}
+  .term p{margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.5;}
+
+  @media (max-width:520px){
+    .term{grid-template-columns:1fr;}
+    #brands-body{grid-template-columns:1fr !important;}
+    h1{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand-mark">
+      <div class="box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#221D16" stroke-width="2"><path d="M14 2 L20 8 L18 10 L16 8 L14 10 L18 14 L16 16 L4 4 L8 2 L10 4 L8 6 L10 8 Z"/></svg>
+      </div>
+      <div>
+        <h1>Manual del taller</h1>
+        <p class="sub">FUNDAMENTOS DE MECÁNICA · TODAS LAS MARCAS</p>
+      </div>
+    </div>
+    <div class="stamp" id="stamp">
+      <b id="stamp-pct">0%</b>
+      <span>revisado</span>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <div class="sheet">
+    <div class="sheet-head">
+      <span id="sheet-label">BAHÍA 01</span>
+      <span id="sheet-sub">FICHA TÉCNICA</span>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+
+  <footer>
+    <button class="glossary-toggle" id="brands-toggle">Ver ficha de las 10 marcas del taller ↓</button>
+    <button class="glossary-toggle" id="gloss-toggle">Ver glosario de términos del taller ↓</button>
+    <button class="action ghost" id="reset-btn" style="font-size:11.5px; padding:8px 12px;">Reiniciar progreso</button>
+  </footer>
+
+  <div id="brands" class="sheet" style="margin-top:0; margin-bottom:18px;">
+    <div class="sheet-head"><span>LAS 10 MARCAS</span><span>FICHA RÁPIDA</span></div>
+    <div class="sheet-body" id="brands-body" style="display:grid; grid-template-columns:1fr 1fr; gap:14px;"></div>
+  </div>
+
+  <div id="glossary" class="sheet" style="margin-top:0;">
+    <div class="sheet-head"><span>GLOSARIO</span><span>ESPAÑOL / TALLER</span></div>
+    <div class="sheet-body" id="glossary-body"></div>
+  </div>
+
+</div>
+
+<script>
+const MODULES = [
+  {title:"El motor", cards:[
+    "El motor de 4 tiempos funciona así: admisión (entra mezcla de aire y combustible), compresión (el pistón la comprime), explosión (la bujía la enciende y empuja el pistón) y escape (salen los gases quemados).",
+    "Partes clave: cilindros (donde suben y bajan los pistones), pistones, bujías (encienden la mezcla) y válvulas (dejan entrar y salir los gases).",
+    "Motor a gasolina usa bujía para encender la mezcla. Motor diésel no usa bujía: comprime tanto el aire que el combustible se enciende solo por el calor."
+  ], quiz:[
+    {q:"¿Cuál de estos NO es uno de los 4 tiempos del motor?", options:["Admisión","Compresión","Frenado","Escape"], correct:2},
+    {q:"En un motor diésel, ¿qué componente inyecta el combustible a alta presión dentro del cilindro?", options:["El carburador","El inyector","La bujía","El alternador"], correct:1},
+    {q:"Si un motor 'pierde compresión' en un cilindro, ¿qué es lo más probable que esté fallando?", options:["El alternador","Los anillos del pistón o las válvulas","El líquido de frenos","La correa de la dirección"], correct:1},
+    {q:"¿Cuál es la función principal de la culata (cabezote)?", options:["Sellar los cilindros y alojar válvulas y bujías","Guardar el aceite del motor","Conectar la caja de cambios","Enfriar los frenos"], correct:0}
+  ]},
+  {title:"Transmisión", cards:[
+    "La transmisión (caja de cambios) toma la fuerza del motor y la manda a las ruedas en la marcha correcta. Puede ser manual (con embrague) o automática (cambia sola).",
+    "El embrague conecta y desconecta el motor de la caja de cambios, para cambiar de marcha sin apagar el motor. Solo existe en carros manuales.",
+    "La tracción indica qué ruedas reciben la fuerza: 4x2 (dos ruedas) o 4x4 (las cuatro ruedas), común en pickups y camiones de trabajo."
+  ], quiz:[
+    {q:"¿Qué hace el embrague?", options:["Frena el carro","Conecta y desconecta el motor de la caja","Enciende las luces","Enfría el motor"], correct:1},
+    {q:"Si al soltar el embrague el carro vibra o tarda en agarrar, ¿qué pieza probablemente está desgastada?", options:["El disco de embrague","El filtro de aire","El radiador","La bomba de agua"], correct:0},
+    {q:"En una caja automática, ¿qué función cumple el convertidor de torque?", options:["Transmite la fuerza del motor a la caja usando fluido, sin embrague mecánico","Enfría el motor","Ilumina el tablero","Ajusta la dirección"], correct:0},
+    {q:"Un carro con tracción 4x2 y motor delantero generalmente se llama:", options:["Tracción trasera","Tracción delantera","Tracción total","Sin tracción"], correct:1}
+  ]},
+  {title:"Frenos", cards:[
+    "El sistema de frenos usa presión hidráulica: al pisar el pedal, el líquido de frenos empuja las pastillas o zapatas contra el disco o tambor de cada rueda.",
+    "Frenos de disco (pastillas) son más potentes y se enfrían mejor, comunes adelante. Frenos de tambor (zapatas) son más simples, a veces van atrás.",
+    "El ABS (sistema antibloqueo) evita que las ruedas se traben al frenar fuerte, para mantener el control de la dirección."
+  ], quiz:[
+    {q:"¿Qué tipo de presión usa el sistema de frenos?", options:["Neumática (aire)","Hidráulica (líquido)","Eléctrica","Magnética"], correct:1},
+    {q:"Si el pedal de freno se siente 'esponjoso' o se hunde, ¿qué problema es más probable?", options:["Aire atrapado en el sistema hidráulico","Exceso de combustible","Batería baja","Filtro de aire sucio"], correct:0},
+    {q:"¿Qué evita el sistema ABS?", options:["Que se caliente el motor","Que las ruedas se bloqueen al frenar","Que se gaste la batería","Que suba el kilometraje"], correct:1},
+    {q:"¿Por qué los frenos de disco se usan más en las ruedas delanteras?", options:["Porque son más baratos","Porque el frenado transfiere más peso y calor al eje delantero","Porque no requieren mantenimiento","Porque no usan líquido de frenos"], correct:1}
+  ]},
+  {title:"Sistema eléctrico", cards:[
+    "La batería arranca el carro y da energía con el motor apagado. El alternador la recarga mientras el motor funciona.",
+    "El motor de arranque (marcha) usa la energía de la batería para hacer girar el motor por primera vez al encender el carro.",
+    "Los fusibles protegen los circuitos: si hay una sobrecarga, el fusible se quema antes de que se dañe algo más caro."
+  ], quiz:[
+    {q:"¿Qué componente recarga la batería mientras el carro anda?", options:["El alternador","El radiador","El embrague","El amortiguador"], correct:0},
+    {q:"Si la batería está bien pero el carro no arranca y se escucha un clic al girar la llave, ¿qué pieza sospechas primero?", options:["El motor de arranque","El filtro de aceite","El amortiguador","El líquido de frenos"], correct:0},
+    {q:"¿Qué función tiene un fusible?", options:["Aumentar la potencia","Proteger el circuito de sobrecargas","Cargar el aire acondicionado","Alinear las llantas"], correct:1},
+    {q:"Si las luces del carro se ven muy tenues al ralentí pero mejoran al acelerar, el problema probablemente está en:", options:["La batería o el alternador","Las llantas","El filtro de combustible","La suspensión"], correct:0}
+  ]},
+  {title:"Suspensión y dirección", cards:[
+    "La suspensión (amortiguadores y resortes) absorbe los golpes del camino para que el viaje sea suave y las llantas mantengan contacto con el piso.",
+    "La dirección conecta el volante con las ruedas delanteras. Puede ser hidráulica o eléctrica, ambas facilitan girar el volante con poco esfuerzo.",
+    "Alineación (ajustar el ángulo de las llantas) y balanceo (repartir el peso de la llanta) evitan que el carro jale hacia un lado o vibre al manejar."
+  ], quiz:[
+    {q:"¿Qué absorben los amortiguadores?", options:["El ruido del motor","Los golpes e irregularidades del camino","El calor del freno","La electricidad sobrante"], correct:1},
+    {q:"Si un carro 'rebota' varias veces después de pasar un tope, ¿qué pieza está probablemente gastada?", options:["Los amortiguadores","La batería","El filtro de aceite","Las bujías"], correct:0},
+    {q:"¿Qué conecta el volante con las ruedas?", options:["La transmisión","El sistema de dirección","El alternador","El escape"], correct:1},
+    {q:"El desgaste irregular en el borde interior o exterior de una llanta suele indicar problema de:", options:["Alineación","Nivel de aceite","Batería","Filtro de aire"], correct:0}
+  ]},
+  {title:"Fluidos y mantenimiento", cards:[
+    "El aceite de motor lubrica las piezas internas. El refrigerante evita que el motor se sobrecaliente. El líquido de frenos transmite la presión al frenar.",
+    "Los filtros limpian lo que entra al motor: filtro de aire, filtro de aceite y filtro de combustible.",
+    "El mantenimiento preventivo (cambiar aceite y filtros a tiempo) evita daños más caros después. Cada carro tiene su propio intervalo recomendado."
+  ], quiz:[
+    {q:"¿Qué función tiene el refrigerante?", options:["Lubricar el motor","Evitar que el motor se sobrecaliente","Frenar el carro","Encender las bujías"], correct:1},
+    {q:"Si el aceite del motor se ve lechoso o con espuma, ¿qué problema puede indicar?", options:["Mezcla con refrigerante, posible falla de junta de culata","Exceso de aire en las llantas","Batería descargada","Filtro de aire sucio"], correct:0},
+    {q:"¿Cuál filtro limpia el combustible antes de llegar al motor?", options:["Filtro de aire","Filtro de aceite","Filtro de combustible","Filtro de cabina"], correct:2},
+    {q:"¿Por qué es peligroso seguir manejando con muy poco líquido de frenos?", options:["Se puede perder presión de frenado y fallar el freno","El carro consume más gasolina","Se dañan las luces","Se desgasta el volante"], correct:0}
+  ]}
+];
+
+const GLOSSARY = [
+  ["RPM","Revoluciones por minuto. Qué tan rápido gira el motor."],
+  ["Torque","Fuerza de giro que produce el motor, no es lo mismo que velocidad."],
+  ["OBD / scanner","Puerto y equipo para diagnosticar fallas del carro conectándolo a una computadora."],
+  ["Kit de embrague","Conjunto de piezas que se cambian juntas al reparar el embrague."],
+  ["Torque wrench (llave de torque)","Herramienta que aprieta un tornillo a la fuerza exacta que pide el fabricante."],
+  ["Check engine","Luz del tablero que avisa que el motor tiene una falla detectada."],
+  ["Overhaul","Reparación completa de una pieza, como reconstruir un motor desde adentro."],
+  ["Bay / bahía","Espacio del taller donde se sube un carro para trabajarlo."]
+];
+
+const DIAGRAMS = [
+`<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+  <rect x="150" y="20" width="100" height="180" fill="none" stroke="#221D16" stroke-width="3"/>
+  <rect x="160" y="110" width="80" height="60" fill="#E4DBC6" stroke="#221D16" stroke-width="2.5"/>
+  <line x1="200" y1="170" x2="200" y2="215" stroke="#221D16" stroke-width="3"/>
+  <circle cx="200" cy="222" r="10" fill="none" stroke="#221D16" stroke-width="3"/>
+  <rect x="185" y="5" width="30" height="20" fill="#C85A1E" stroke="#221D16" stroke-width="2"/>
+  <line x1="200" y1="5" x2="200" y2="-5" stroke="#C85A1E" stroke-width="3"/>
+  <rect x="152" y="45" width="20" height="14" fill="#D9A230" stroke="#221D16" stroke-width="2"/>
+  <rect x="228" y="45" width="20" height="14" fill="#D9A230" stroke="#221D16" stroke-width="2"/>
+  <text x="260" y="18" class="dlabel">Bujía</text>
+  <text x="260" y="55" class="dlabel">Válvulas</text>
+  <text x="260" y="145" class="dlabel">Pistón</text>
+  <text x="260" y="220" class="dlabel">Cigüeñal</text>
+  <text x="20" y="145" class="dlabel">Cilindro</text>
+</svg>`,
+`<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="110" r="55" fill="none" stroke="#221D16" stroke-width="3"/>
+  <circle cx="120" cy="110" r="18" fill="#C85A1E" stroke="#221D16" stroke-width="2.5"/>
+  <circle cx="260" cy="110" r="40" fill="none" stroke="#221D16" stroke-width="3"/>
+  <circle cx="260" cy="110" r="13" fill="#D9A230" stroke="#221D16" stroke-width="2.5"/>
+  <line x1="120" y1="55" x2="260" y2="70" stroke="#221D16" stroke-width="2" stroke-dasharray="3 4"/>
+  <text x="70" y="185" class="dlabel">Embrague</text>
+  <text x="230" y="165" class="dlabel">Caja de cambios</text>
+</svg>`,
+`<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="110" r="70" fill="none" stroke="#221D16" stroke-width="3"/>
+  <circle cx="200" cy="110" r="14" fill="#221D16"/>
+  <circle cx="200" cy="110" r="45" fill="none" stroke="#C85A1E" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="150" y="55" width="34" height="55" rx="4" fill="#D9A230" stroke="#221D16" stroke-width="2.5"/>
+  <text x="230" y="55" class="dlabel">Disco</text>
+  <text x="30" y="85" class="dlabel">Pastilla</text>
+  <text x="150" y="200" class="dlabel">Caliper</text>
+</svg>`,
+`<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="80" width="70" height="55" fill="#D9A230" stroke="#221D16" stroke-width="2.5"/>
+  <text x="55" y="112" class="dbig">+ &#8722;</text>
+  <circle cx="260" cy="107" r="42" fill="none" stroke="#221D16" stroke-width="3"/>
+  <circle cx="260" cy="107" r="10" fill="#C85A1E"/>
+  <line x1="110" y1="107" x2="218" y2="107" stroke="#221D16" stroke-width="2.5"/>
+  <rect x="330" y="90" width="30" height="34" fill="none" stroke="#221D16" stroke-width="2.5"/>
+  <line x1="302" y1="107" x2="330" y2="107" stroke="#221D16" stroke-width="2.5"/>
+  <text x="35" y="150" class="dlabel">Batería</text>
+  <text x="225" y="165" class="dlabel">Alternador</text>
+  <text x="315" y="140" class="dlabel">Fusible</text>
+</svg>`,
+`<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+  <path d="M170 20 v40 M170 65 v10 M170 80 v10 M170 95 v10 M170 110 v10 M170 125 v10 M170 140 v10" stroke="#221D16" stroke-width="3" fill="none"/>
+  <path d="M160 25 h20 M160 55 h20" stroke="#221D16" stroke-width="3"/>
+  <rect x="150" y="150" width="40" height="45" fill="#D9A230" stroke="#221D16" stroke-width="2.5"/>
+  <circle cx="290" cy="130" r="45" fill="none" stroke="#221D16" stroke-width="3"/>
+  <line x1="290" y1="130" x2="330" y2="100" stroke="#C85A1E" stroke-width="4"/>
+  <text x="130" y="15" class="dlabel">Resorte</text>
+  <text x="130" y="215" class="dlabel">Amortiguador</text>
+  <text x="255" y="60" class="dlabel">Dirección</text>
+</svg>`,
+`<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+  <path d="M120 40 h40 l10 20 v90 a20 20 0 0 1 -20 20 h-20 a20 20 0 0 1 -20 -20 v-90 z" fill="none" stroke="#221D16" stroke-width="3"/>
+  <ellipse cx="140" cy="100" rx="10" ry="30" fill="#D9A230" opacity="0.6"/>
+  <circle cx="280" cy="110" r="45" fill="none" stroke="#221D16" stroke-width="3"/>
+  <rect x="265" y="70" width="30" height="20" fill="#C85A1E" stroke="#221D16" stroke-width="2"/>
+  <text x="90" y="185" class="dlabel">Aceite</text>
+  <text x="245" y="170" class="dlabel">Filtro</text>
+</svg>`
+];
+
+const BRANDS = [
+  {name:"Ford", country:"Estados Unidos", info:"Marca independiente, una de las más antiguas del mundo. Fabrica desde sedanes hasta la pickup F-150. Mecánica muy documentada, con muchos repuestos y talleres especializados en el país."},
+  {name:"Kia", country:"Corea del Sur", info:"Parte del grupo Hyundai Motor Group. Gama completa de sedanes, SUVs y eléctricos. Conocida por electrónica moderna y buena relación de garantía."},
+  {name:"Mazda", country:"Japón", info:"Marca independiente. Desarrolla sus propios motores (tecnología SkyActiv, enfocada en eficiencia). Históricamente destacó por el motor rotativo, hoy usa motores convencionales de alta compresión."},
+  {name:"Lincoln", country:"Estados Unidos", info:"Marca de lujo propiedad de Ford. Comparte muchas plataformas y piezas mecánicas con modelos Ford, aunque con mejor equipamiento."},
+  {name:"Geely", country:"China", info:"Uno de los grupos automotrices más grandes de China. Es dueño de Volvo, Lotus, Zeekr, Lynk&amp;Co y también de Farizon y Riddara, dos marcas de esta misma lista."},
+  {name:"Riddara", country:"China (grupo Geely)", info:"Marca de pickups eléctricas creada en 2022, conocida globalmente como Radar Auto. Se especializa en camionetas 100% eléctricas de plataforma nueva, no adaptadas de motor a combustión."},
+  {name:"JAC", country:"China", info:"Jianghuai Automobile, fabricante grande de camiones, vans y pickups. Tiene una alianza industrial con Volkswagen en China para producir vehículos eléctricos."},
+  {name:"Shineray", country:"China", info:"Empresa nacida en motocicletas (1997), luego expandió a vehículos comerciales y mini trucks junto con Brilliance Auto. También es dueña de la marca de SUVs italiana SWM."},
+  {name:"Forland", country:"China (grupo Foton/BAIC)", info:"Unidad de negocio de Foton, el mayor fabricante de camiones de China. Se enfoca en camiones de carga liviana y volquetas de bajo costo para transporte urbano y rural."},
+  {name:"Farizon", country:"China (grupo Geely)", info:"División de vehículos comerciales eléctricos de Geely. Fabrica furgonetas 100% eléctricas de reparto, con buena calificación de seguridad Euro NCAP."}
+];
+
+const brandsBody = document.getElementById('brands-body');
+BRANDS.forEach(b=>{
+  const d = document.createElement('div');
+  d.className = 'brand-card';
+  d.innerHTML = '<p class="bname">'+b.name+'</p><p class="bcountry">'+b.country+'</p><p>'+b.info+'</p>';
+  brandsBody.appendChild(d);
+});
+document.getElementById('brands-toggle').onclick = ()=>{
+  document.getElementById('brands').classList.toggle('open');
+};
+
+let state = {current:0, progress:{}, cardIndex:0, quizIndex:0, quizAnswered:null, quizScore:0};
+
+async function loadState(){
+  try{
+    const r = await window.storage.get('mecanica-progress-doc');
+    if(r && r.value) state.progress = JSON.parse(r.value);
+  }catch(e){}
+  render();
+}
+async function saveProgress(){
+  try{ await window.storage.set('mecanica-progress-doc', JSON.stringify(state.progress)); }catch(e){}
+}
+
+function renderTabs(){
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = '';
+  MODULES.forEach((m,i)=>{
+    const done = state.progress[i] && state.progress[i].completed;
+    const b = document.createElement('button');
+    b.className = i===state.current ? 'active' : '';
+    b.innerHTML = (String(i+1).padStart(2,'0')) + ' ' + m.title + (done ? ' <span class="n">✓</span>' : '');
+    b.onclick = ()=>{ state.current=i; state.cardIndex=0; state.quizIndex=0; state.quizAnswered=null; state.quizScore=0; render(); };
+    tabs.appendChild(b);
+  });
+}
+
+function renderStamp(){
+  const doneCount = MODULES.filter((m,i)=>state.progress[i] && state.progress[i].completed).length;
+  const pct = Math.round((doneCount/MODULES.length)*100);
+  document.getElementById('stamp-pct').textContent = pct + '%';
+  const stamp = document.getElementById('stamp');
+  stamp.style.borderColor = pct===100 ? '#4B7A3E' : (pct>0 ? '#D9A230' : '#8A8271');
+  stamp.style.color = pct===100 ? '#4B7A3E' : (pct>0 ? '#D9A230' : '#8A8271');
+}
+
+function render(){
+  renderTabs();
+  renderStamp();
+  const m = MODULES[state.current];
+  document.getElementById('sheet-label').textContent = 'BAHÍA ' + String(state.current+1).padStart(2,'0');
+  const body = document.getElementById('sheet-body');
+
+  if(state.cardIndex < m.cards.length){
+    document.getElementById('sheet-sub').textContent = 'FICHA TÉCNICA';
+    body.innerHTML = `
+      <div class="diagram-box">${DIAGRAMS[state.current]}</div>
+      <div class="card-text">${m.cards[state.cardIndex]}</div>
+      <div class="row-between">
+        <span class="count">TARJETA ${state.cardIndex+1} / ${m.cards.length}</span>
+        <button class="action" id="next-card">${state.cardIndex+1 < m.cards.length ? 'Siguiente' : 'Ir al quiz'}</button>
+      </div>`;
+    document.getElementById('next-card').onclick = ()=>{ state.cardIndex++; render(); };
+  } else if(state.quizIndex < m.quiz.length){
+    document.getElementById('sheet-sub').textContent = 'EVALUACIÓN';
+    const q = m.quiz[state.quizIndex];
+    const answered = state.quizAnswered !== null;
+    body.innerHTML = `
+      <p class="count" style="margin:0 0 8px;">PREGUNTA ${state.quizIndex+1} / ${m.quiz.length}</p>
+      <p class="q-title">${q.q}</p>
+      <div id="opts"></div>
+      <div class="row-between" id="quiz-next-wrap" style="justify-content:flex-end;"></div>`;
+    const opts = document.getElementById('opts');
+    q.options.forEach((opt,i)=>{
+      const b = document.createElement('button');
+      b.className = 'opt' + (answered && i===q.correct ? ' correct' : '') + (answered && i===state.quizAnswered && i!==q.correct ? ' wrong' : '');
+      b.textContent = opt;
+      b.disabled = answered;
+      b.onclick = ()=>{ state.quizAnswered=i; if(i===q.correct) state.quizScore++; render(); };
+      opts.appendChild(b);
+    });
+    if(answered){
+      const wrap = document.getElementById('quiz-next-wrap');
+      const nb = document.createElement('button');
+      nb.className = 'action';
+      nb.textContent = state.quizIndex+1 < m.quiz.length ? 'Siguiente pregunta' : 'Ver resultado';
+      nb.onclick = ()=>{ state.quizIndex++; state.quizAnswered=null; render(); };
+      wrap.appendChild(nb);
+    }
+  } else {
+    document.getElementById('sheet-sub').textContent = 'RESULTADO';
+    const passed = state.quizScore >= 3;
+    if(passed){ state.progress[state.current] = {completed:true}; saveProgress(); }
+    body.innerHTML = `
+      <div class="result">
+        <div class="score">${state.quizScore} de ${m.quiz.length} correctas</div>
+        <div class="msg">${passed ? 'Bahía completada. Puedes pasar a la siguiente.' : 'Repasa las fichas e inténtalo de nuevo.'}</div>
+        <div class="btn-row">
+          <button class="action ghost" id="retry">Repasar fichas</button>
+          ${state.current+1 < MODULES.length ? '<button class="action" id="go-next">Siguiente bahía</button>' : ''}
+        </div>
+      </div>`;
+    document.getElementById('retry').onclick = ()=>{ state.cardIndex=0; state.quizIndex=0; state.quizAnswered=null; state.quizScore=0; render(); };
+    const goNext = document.getElementById('go-next');
+    if(goNext) goNext.onclick = ()=>{ state.current++; state.cardIndex=0; state.quizIndex=0; state.quizAnswered=null; state.quizScore=0; render(); };
+  }
+}
+
+document.getElementById('reset-btn').onclick = async ()=>{
+  state = {current:0, progress:{}, cardIndex:0, quizIndex:0, quizAnswered:null, quizScore:0};
+  await saveProgress();
+  render();
+};
+
+const glossBody = document.getElementById('glossary-body');
+GLOSSARY.forEach(([term,def])=>{
+  const d = document.createElement('div');
+  d.className = 'term';
+  d.innerHTML = '<b>'+term+'</b><p>'+def+'</p>';
+  glossBody.appendChild(d);
+});
+document.getElementById('gloss-toggle').onclick = ()=>{
+  document.getElementById('glossary').classList.toggle('open');
+};
+
+loadState();
+</script>
+</body>
+</html>
